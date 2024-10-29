@@ -1,0 +1,21 @@
+
+{% macro render_menu(_self, items, level) %}
+	<ul class="header_menu__items header_menu__items--level{{ level }}">
+	{% for item in items %}
+		<li class="header_menu__item" itemprop="name">
+			{% if item.url != "#" %}
+				<a href="{{ item.url != "#" ? item.url : "" }}" itemprop="url">{{ item.title }}</a>
+			{% else %}
+				<a itemprop="url">{{ item.title }}</a>
+			{% endif %}
+			{% if count(item.subitems) > 0 %}
+			{{ _self.render_menu(_self, item.subitems,level + 1) }}
+			{% endif %}
+		</li>
+	{% endfor %}
+	</ul>
+{% endmacro %}
+
+<nav class="header_menu" itemscope itemtype="https://schema.org/SiteNavigationElement">
+	{{ _self.render_menu(_self, items, 0) }}
+</nav>

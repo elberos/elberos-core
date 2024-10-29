@@ -30,6 +30,54 @@ class Helper
 	
 	
 	/**
+	 * Returns assets url
+	 */
+	static function assets($src)
+	{
+		return get_template_directory_uri() . $src;
+	}
+	
+	
+	/**
+	 * Render widget
+	 */
+	static function widget($widget_name, $params)
+	{
+		$main = \Elberos_Plugin::main();
+		
+		/* Get wiget class name */
+		if (!isset($main->widgets[$widget_name])) return;
+		$class_name = $main->widgets[$widget_name];
+		
+		/* Render widget */
+		$widget = static::newInstance($class_name, [$params]);
+		$widget->render();
+	}
+	
+	
+	/**
+	 * Dump value
+	 */
+	static function dump($value)
+	{
+		echo "<pre>";
+		var_dump($value);
+		echo "</pre>";
+	}
+	
+	
+	/**
+	 * Create new instance
+	 */
+	static function newInstance($class_name, $params = [])
+	{
+		$reflectionClass = new \ReflectionClass($class_name);
+		$obj = $reflectionClass->newInstanceArgs($params);
+		return $obj;
+	}
+	
+	
+	/**
 	 * Returns posts images
 	 */
 	static function get_posts_images($posts, $db_prefix = null)

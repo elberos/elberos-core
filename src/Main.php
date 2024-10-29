@@ -13,6 +13,7 @@ class Main
 	var $twig = null;
 	var $controllers = [];
 	var $routes = [];
+	var $widgets = [];
 	var $controller = null;
 	var $route = null;
 	
@@ -43,6 +44,9 @@ class Main
 		/* Register routes */
 		$this->registerRoutes();
 		
+		/* Register widgets */
+		$this->registerWidgets();
+		
 		/* Setup route */
 		$this->setupRoute();
 	}
@@ -67,6 +71,15 @@ class Main
 	
 	
 	/**
+	 * Add widget
+	 */
+	function addWidget($widget_name, $class_name)
+	{
+		$this->widgets[$widget_name] = $class_name;
+	}
+	
+	
+	/**
 	 * Register controllers
 	 */
 	function registerControllers()
@@ -84,6 +97,15 @@ class Main
 		{
 			$controller->register();
 		}
+	}
+	
+	
+	/**
+	 * Register widgets
+	 */
+	function registerWidgets()
+	{
+		do_action('elberos_register_widgets', $this);
 	}
 	
 	

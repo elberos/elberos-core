@@ -46,7 +46,10 @@ class Twig
 		
 		/* Create twig loader */
 		$loader = new \Twig\Loader\FilesystemLoader();
-		$loader->addPath(get_template_directory() . '/templates');
+		if (is_dir(get_template_directory() . '/templates'))
+		{
+			$loader->addPath(get_template_directory() . '/templates');
+		}
 		do_action('elberos_twig_loader', [$loader]);
 		
 		/* Create twig instance */
@@ -63,6 +66,21 @@ class Twig
 			return call_user_func_array($name, $args);
 		}));
 		
+		/* Undefined functions */
+		$function = function ($name) {
+			if (!function_exists($name))
+			{
+				return false;
+			}
+			return new \Twig\TwigFunction($name, $name);
+		};
+		$twig->registerUndefinedFunctionCallback($function);
+		$twig->registerUndefinedFilterCallback($function);
+		
+		/* Add Helper functions */
+		$twig->addFunction(new \Twig\TwigFunction('assets', [\Elberos\Helper::class, 'assets']));
+		$twig->addFunction(new \Twig\TwigFunction('widget', [\Elberos\Helper::class, 'widget']));
+		
 		/* Add wp query function */
 		$twig->addFunction(new \Twig\TwigFunction('wp_query', function()
 		{
@@ -70,25 +88,24 @@ class Twig
 			return $wp_query;
 		}));
 		
-		/* Count function */
-		$twig->addFunction(new \Twig\TwigFunction('count', function($value)
-		{
-			return count($value);
-		}));
-		
 		/* Dump function */
-		$twig->addFunction(new \Twig\TwigFunction('dump', function($value)
-		{
-			echo "<pre>";
-			var_dump($value);
-			echo "</pre>";
-		}));
+		$twig->addFunction(new \Twig\TwigFunction('dump', [\Elberos\Helper::class, 'dump']));
 		
+		/* Twig variable */
 		$this->twig = $twig;
 		$this->context = new \Elberos\Context();
 		
 		/* Do action */
 		do_action('elberos_twig', [$this]);
+	}
+	
+	
+	/**
+	 * Render template
+	 */
+	function renderTemplate($template, $context)
+	{
+		return $this->twig->render($template, $context);
 	}
 	
 	
