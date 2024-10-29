@@ -32,7 +32,7 @@ class Helper
 	/**
 	 * Returns posts images
 	 */
-	function get_posts_images($posts, $db_prefix = null)
+	static function get_posts_images($posts, $db_prefix = null)
 	{
 		global $wpdb;
 		
@@ -109,7 +109,7 @@ class Helper
 	/**
 	 * Returns images urls
 	 */
-	function get_images_url($images_id, $db_prefix = null)
+	static function get_images_url($images_id, $db_prefix = null)
 	{
 		global $wpdb;
 		

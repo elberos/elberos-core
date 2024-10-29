@@ -63,14 +63,6 @@ class Twig
 			return call_user_func_array($name, $args);
 		}));
 		
-		/* Add function */
-		$twig->addFunction(new \Twig\TwigFunction('elberos', function($name)
-		{
-			$args = func_get_args();
-			array_shift($args);
-			return call_user_func_array($callback = [\Elberos\Helper::class, $name], $args);
-		}));
-		
 		/* Add wp query function */
 		$twig->addFunction(new \Twig\TwigFunction('wp_query', function()
 		{

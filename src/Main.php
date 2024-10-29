@@ -116,7 +116,8 @@ class Main
 		/* Add default pages */
 		if (is_404()) $templates[] = "pages/404.twig";
 		if (is_archive()) $templates[] = "pages/archive.twig";
-		if (is_page()) $templates[] = "pages/page.twig";
+		if (is_single()) $templates[] = "pages/single.twig";
+		if (is_page() || is_single()) $templates[] = "pages/page.twig";
 		if (is_home() && $this->route == null) $templates[] = "pages/index.twig";
 		$templates[] = "pages/index.twig";
 		

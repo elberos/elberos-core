@@ -3,7 +3,7 @@
  * Plugin Name: Elberos Framework for WordPress
  * Description: Elberos plugin for WordPress
  * Version:     3.0.0
- * Author:      Ildar Bikmamatov <support@bayrell.org>
+ * Author:      Elberos team <support@bayrell.org>
  * License:     GNU GENERAL PUBLIC LICENSE 3.0
  */
 
