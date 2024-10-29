@@ -1,0 +1,19 @@
+{
+	"name": "elberos/elberos-core",
+	"type": "library",
+	"description": "Elberos",
+	"license": "GNU GPL 3",
+	"version": "3.0.0",
+	"authors": [
+		{
+			"name": "Ildar Bikmamatov",
+			"email": "support@elberos.org"
+		}
+	],
+	"autoload": {
+		"files": [ "elberos.php" ]
+	},
+	"require": {
+		"twig/twig": "^3.11"
+	}
+}
