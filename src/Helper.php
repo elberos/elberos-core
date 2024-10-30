@@ -98,6 +98,25 @@ class Helper
 	
 	
 	/**
+	 * Returns global WP_Query
+	 */
+	static function wp_query()
+	{
+		global $wp_query;
+		return $wp_query;
+	}
+	
+	
+	/**
+	 * Returns new WP_Query instance
+	 */
+	static function create_wp_query($params)
+	{
+		return new \WP_Query($params);
+	}
+	
+	
+	/**
 	 * Create new instance
 	 */
 	static function newInstance($class_name, $params = [])

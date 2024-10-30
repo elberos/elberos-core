@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Elberos Framework for WordPress
+ * Plugin Name: Elberos Framework
  * Description: Elberos plugin for WordPress
  * Version:     3.0.0
  * Author:      Elberos team <support@bayrell.org>

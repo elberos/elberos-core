@@ -78,17 +78,17 @@ class Twig
 		$twig->registerUndefinedFilterCallback($function);
 		
 		/* Add Helper functions */
-		$twig->addFunction(new \Twig\TwigFunction('assets', [\Elberos\Helper::class, 'assets']));
-		$twig->addFunction(new \Twig\TwigFunction('widget', [\Elberos\Helper::class, 'widget']));
-		$twig->addFunction(new \Twig\TwigFunction('widget_content',
-			[\Elberos\Helper::class, 'widget_content']));
-		
-		/* Add wp query function */
-		$twig->addFunction(new \Twig\TwigFunction('wp_query', function()
+		$items = [
+			"assets",
+			"create_wp_query",
+			"widget",
+			"widget_content",
+			"wp_query",
+		];
+		foreach ($items as $item)
 		{
-			global $wp_query;
-			return $wp_query;
-		}));
+			$twig->addFunction(new \Twig\TwigFunction($item, [\Elberos\Helper::class, $item]));
+		}
 		
 		/* Dump function */
 		$twig->addFunction(new \Twig\TwigFunction('dump', [\Elberos\Helper::class, 'dump']));
