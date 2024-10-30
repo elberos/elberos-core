@@ -1,0 +1,35 @@
+
+{% macro render_dropdown(_self, widget, items, level) %}
+	{% if count(items) > 0 %}
+	<span class="menu__item_dropdown">&#9661;</span>
+	{% endif %}
+{% endmacro %}
+
+{% macro render_menu(_self, widget, items, level) %}
+	<ul class="menu__items menu__items--level{{ level }}">
+	{% for item in items %}
+		<li class="menu__item" itemprop="name">
+			{% if item.url != "#" %}
+				<a href="{{ item.url != "#" ? item.url : "" }}" itemprop="url">
+					<span class="menu__item_title">{{ item.title }}</span>
+					{{ _self.render_dropdown(_self, widget, item.subitems) }}
+				</a>
+			{% else %}
+				<a itemprop="url">
+					<span class="menu__item_title">{{ item.title }}</span>
+					{{ _self.render_dropdown(_self, widget, item.subitems) }}
+				</a>
+			{% endif %}
+			{% if count(item.subitems) > 0 %}
+			{{ _self.render_menu(_self, widget, item.subitems,level + 1) }}
+			{% endif %}
+		</li>
+	{% endfor %}
+	</ul>
+{% endmacro %}
+
+<nav class="menu {{ function("\\Elberos\\Helper::getStyles", "menu", widget.getStyles()) }}"
+	itemscope itemtype="https://schema.org/SiteNavigationElement"
+>
+	{{ _self.render_menu(_self, widget, widget.items, 0) }}
+</nav>

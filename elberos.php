@@ -93,6 +93,7 @@ class Elberos_Plugin
 	 */
 	public static function register_widgets($main)
 	{
+		$main->addWidget("logo", \Elberos\Widget\Logo::class);
 		$main->addWidget("menu", \Elberos\Widget\Menu::class);
 	}
 	

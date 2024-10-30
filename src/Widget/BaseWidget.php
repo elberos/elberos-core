@@ -19,6 +19,14 @@ class BaseWidget
 	
 	
 	/**
+	 * Setup widget
+	 */
+	function setup()
+	{
+	}
+	
+	
+	/**
 	 * Render widget
 	 */
 	function render()

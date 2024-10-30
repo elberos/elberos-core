@@ -13,6 +13,8 @@ class Menu extends \Elberos\Widget\BaseWidget
 	var $name = "";
 	var $header = false;
 	var $mobile = false;
+	var $styles = [];
+	var $items = [];
 	
 	
 	/**
@@ -25,6 +27,19 @@ class Menu extends \Elberos\Widget\BaseWidget
 		if (isset($params["name"])) $this->name = $params["name"];
 		if (isset($params["header"])) $this->header = $params["header"];
 		if (isset($params["mobile"])) $this->mobile = $params["mobile"];
+	}
+	
+	
+	/**
+	 * Returns styles
+	 */
+	function getStyles()
+	{
+		$styles = $this->styles;
+		array_unshift($styles, $this->name);
+		if ($this->header) array_push($styles, "header");
+		if ($this->mobile) array_push($styles, "mobile");
+		return $styles;
 	}
 	
 	
@@ -47,9 +62,9 @@ class Menu extends \Elberos\Widget\BaseWidget
 	
 	
 	/**
-	 * Render widget
+	 * Setup widget
 	 */
-	function render()
+	function setup()
 	{
 		/* Find menu is exists */
 		$locations = get_nav_menu_locations();
@@ -60,14 +75,20 @@ class Menu extends \Elberos\Widget\BaseWidget
 		$menu_items = wp_get_nav_menu_items($menu_id);
 		
 		/* Build menu items */
-		$items = $this->buildItems($menu_items);
-		
-		/* Render header menu */
+		$this->items = $this->buildItems($menu_items);
+	}
+	
+	
+	/**
+	 * Render widget
+	 */
+	function render()
+	{
+		/* Render menu */
 		$main = \Elberos_Plugin::main();
-		$content = $main->twig->renderTemplate("@core/widget/header_menu.twig", [
+		$content = $main->twig->renderTemplate("@core/widget/menu.twig", [
 			"widget" => $this,
-			"items" => $items,
 		]);
-		echo $content;
+		return $content;
 	}
 }

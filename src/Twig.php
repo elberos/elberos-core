@@ -80,6 +80,8 @@ class Twig
 		/* Add Helper functions */
 		$twig->addFunction(new \Twig\TwigFunction('assets', [\Elberos\Helper::class, 'assets']));
 		$twig->addFunction(new \Twig\TwigFunction('widget', [\Elberos\Helper::class, 'widget']));
+		$twig->addFunction(new \Twig\TwigFunction('widget_content',
+			[\Elberos\Helper::class, 'widget_content']));
 		
 		/* Add wp query function */
 		$twig->addFunction(new \Twig\TwigFunction('wp_query', function()

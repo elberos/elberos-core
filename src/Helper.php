@@ -30,6 +30,21 @@ class Helper
 	
 	
 	/**
+	 * Returns styles
+	 */
+	static function getStyles($class_name, $styles)
+	{
+		$f = function($item) use ($class_name)
+		{
+			if ($item[0] == "@") return $item;
+			return $class_name . "--" . $item;
+		};
+		$styles = array_map($f, $styles);
+		return implode(" ", $styles);
+	}
+	
+	
+	/**
 	 * Returns assets url
 	 */
 	static function assets($src)
@@ -39,19 +54,35 @@ class Helper
 	
 	
 	/**
-	 * Render widget
+	 * Returns widget content
 	 */
-	static function widget($widget_name, $params)
+	static function widget_content($widget_name, $params)
 	{
 		$main = \Elberos_Plugin::main();
 		
 		/* Get wiget class name */
-		if (!isset($main->widgets[$widget_name])) return;
+		if (!isset($main->widgets[$widget_name]))
+		{
+			throw new \Exception("Widget '" . $widget_name . "' not found");
+		}
 		$class_name = $main->widgets[$widget_name];
 		
-		/* Render widget */
+		/* Create widget */
 		$widget = static::newInstance($class_name, [$params]);
-		$widget->render();
+		$widget->setup();
+		
+		/* Render widget */
+		$content = $widget->render();
+		return $content;
+	}
+	
+	
+	/**
+	 * Render widget
+	 */
+	static function widget($widget_name, $params)
+	{
+		echo static::widget_content($widget_name, $params);
 	}
 	
 	

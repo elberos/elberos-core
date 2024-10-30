@@ -1,0 +1,12 @@
+<div class="logo" itemscope itemtype="https://schema.org/Organization">
+	<a href="{{ widget.href }}" itemprop="url">
+		<img src="{{ widget.image }}" alt="{{ widget.title }}" itemprop="logo">
+	</a>
+	<span class="logo__title" itemprop="name">
+		{% if widget.title_raw %}
+			{{ widget.title | raw }}
+		{% else %}
+			{{ widget.title }}
+		{% endif %}
+	</span>
+</div>
