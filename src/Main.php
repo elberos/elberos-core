@@ -16,6 +16,7 @@ class Main
 	var $widgets = [];
 	var $controller = null;
 	var $route = null;
+	var $response = null;
 	
 	
 	/**
@@ -120,11 +121,111 @@ class Main
 	
 	
 	/**
+	 * Returns langs settings
+	 */
+	function getLangSettings()
+	{
+		$langs = \Elberos\Helper::wp_langs();
+		$langs_code = array_map(function($item){ return $item["slug"]; }, $langs);
+		$lang_uri = "";
+		if (count($langs_code) > 0)
+		{
+			$lang_uri = "/(" . implode("|", $langs_code) . ")";
+		}
+		return
+		[
+			"langs" => $langs,
+			"langs_code" => $langs_code,
+			"lang_uri" => $lang_uri,
+			"default_lang" => \Elberos\Helper::wp_get_default_lang(),
+			"hide_default_lang" => \Elberos\Helper::wp_hide_default_lang(),
+		];
+	}
+	
+	
+	/**
+	 * Returns match url
+	 */
+	function getRouteMatch($route, $lang_uri)
+	{
+		$match = isset($route["match"]) ? $route["match"] : null;
+		if ($match) return $match;
+		
+		$match = isset($route["uri"]) ? $route["uri"] : "/";
+		$items = ["{locale_uri}", "{locale_url}", "{lang_uri}", "{lang_url}"];
+		foreach ($items as $item)
+		{
+			$match = str_replace($item, $lang_uri, $match);
+		}
+		$match = str_replace("/", "\\/", $match);
+		$match = "/^" . $match . "$/i";
+		
+		return $match;
+	}
+	
+	
+	/**
 	 * Setup route
 	 */
 	function setupRoute()
 	{
-		/*var_dump($this->routes);*/
+		/* Get current url */
+		$request_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : "/";
+		$request_uri_arr = parse_url($request_uri);
+		$request = [
+			"method" => isset($_SERVER['REQUEST_METHOD']) ?
+				strtoupper($_SERVER['REQUEST_METHOD']) : "GET",
+			"uri" => $request_uri,
+			"path" => isset($request_uri_arr['path']) ? $request_uri_arr['path'] : "/",
+			"query" => isset($arequest_uri_arrrr['query']) ? $request_uri_arr['query'] : "",
+		];
+		
+		/* Get lang settings */
+		$lang_settings = $this->getLangSettings();
+		
+		/* Match routes */
+		foreach ($this->routes as $pos => $route)
+		{
+			$match = $this->getRouteMatch($route, $lang_settings["lang_uri"]);
+			$flag = preg_match_all($match, $request["path"], $matches);
+			
+			/* Match default lang */
+			if (!$flag &&
+				$lang_settings["lang_uri"] != "" &&
+				$lang_settings["hide_default_lang"]
+			)
+			{
+				$match = $this->getRouteMatch($route, "");
+				$flag = preg_match_all($match, $request["path"], $matches);
+			}
+			
+			/* Setup route */
+			if ($flag)
+			{
+				$this->route = $route;
+				$this->route['matches'] = $matches;
+				break;
+			}
+		}
+	}
+	
+	
+	/**
+	 * Run index
+	 */
+	function renderRoute()
+	{
+		if (!$this->route) return;
+		call_user_func_array($this->route["method"], []);
+	}
+	
+	
+	/**
+	 * Render response
+	 */
+	function renderResponse()
+	{
+		echo $this->response;
 	}
 	
 	
@@ -158,8 +259,21 @@ class Main
 		/* Run index */
 		do_action('elberos_index', [$this]);
 		
-		$templates = $this->getDefaultTemplates();
-		echo $this->twig->render($templates);
+		/* Render route */
+		if ($this->route)
+		{
+			$this->renderRoute();
+		}
+		
+		/* Render default template */
+		else
+		{
+			$templates = $this->getDefaultTemplates();
+			$this->response = $this->twig->render($templates);
+		}
+		
+		/* Render response */
+		$this->renderResponse();
 	}
 	
 	

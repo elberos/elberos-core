@@ -67,7 +67,7 @@ function elberos_show_error($e)
 	http_response_code(500);
 	
 	echo "<b>Fatal Error</b><br/>";
-	if ($e instanceof \Exception)
+	if ($e instanceof \Exception || $e instanceof \Error)
 	{
 		$e = $e->getPrevious() ? $e->getPrevious() : $e;
 		

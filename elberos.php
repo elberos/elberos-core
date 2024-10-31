@@ -126,6 +126,7 @@ function elberos()
 	Elberos_Plugin::main()->index();
 }
 
+
 /* Init plugin */
 Elberos_Plugin::init();
 

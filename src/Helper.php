@@ -98,6 +98,66 @@ class Helper
 	
 	
 	/**
+	 * Returns langs
+	 */
+	static function wp_langs()
+	{
+		$res = [];
+		if (defined("POLYLANG_VERSION") && function_exists("\\PLL"))
+		{
+			$links = \PLL()->links;
+			if ($links)
+			{
+				$langs = $links->model->get_languages_list();
+				foreach ($langs as $lang)
+				{
+					$res[] =
+					[
+						"name" => $lang->name,
+						"locale" => $lang->locale,
+						"code" => $lang->slug,
+						"slug" => $lang->slug,
+						"item" => $lang,
+					];
+				}
+			}
+		}
+		$res = apply_filters("elberos_langs", $res);
+		return $res;
+	}
+	
+	
+	/**
+	 * Returns default lang
+	 */
+	static function wp_get_default_lang()
+	{
+		$default_lang = "ru";
+		if (defined("POLYLANG_VERSION") && function_exists("\\PLL"))
+		{
+			$default_lang = \PLL()->options['default_lang'];
+		}
+		$default_lang = apply_filters("elberos_default_lang", $default_lang);
+		return $default_lang;
+	}
+	
+	
+	/**
+	 * Hide default lang
+	 */
+	static function wp_hide_default_lang()
+	{
+		$res = false;
+		if (defined("POLYLANG_VERSION") && function_exists("\\PLL"))
+		{
+			$res = \PLL()->options['hide_default'];
+		}
+		$res = apply_filters("elberos_hide_default_lang", $res);
+		return $res;
+	}
+	
+	
+	/**
 	 * Returns global WP_Query
 	 */
 	static function wp_query()

@@ -10,7 +10,7 @@ namespace Elberos;
 
 class Controller
 {
-	public $main;
+	var $main;
 	
 	
 	/**
@@ -61,7 +61,6 @@ class Controller
 	 */
 	function render($template)
 	{
-		$content = $this->main->twig->render($template);
-		echo $content;
+		$this->main->response = $this->main->twig->render($template);
 	}
 }
