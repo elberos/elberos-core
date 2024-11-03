@@ -25,7 +25,12 @@ class Main
 	function __construct()
 	{
 		/* Apply filter */
+		add_action('wp_head', array($this, 'wp_head'), 0);
+		add_filter('wp_robots', array($this, 'wp_robots'));
+		add_filter('wp_title', array($this, 'wp_title'), 0, 2);
 		add_filter('do_parse_request', array($this, 'do_parse_request'), 9999);
+		add_filter('rank_math/frontend/disable_integration',
+			array($this, 'rank_math_disable_integration'));
 	}
 	
 		
@@ -274,6 +279,46 @@ class Main
 		
 		/* Render response */
 		$this->renderResponse();
+	}
+	
+	
+	/**
+	 * Rank math disable integration
+	 */
+	function rank_math_disable_integration()
+	{
+		if ($this->route == null) return false;
+		return true;
+	}
+	
+	
+	/**
+	 * WordPress head
+	 */
+	function wp_head()
+	{
+		if ($this->route == null) return;
+		$this->twig->context->seo->render();
+	}
+	
+	
+	/**
+	 * WordPress robots
+	 */
+	function wp_robots($robots)
+	{
+		if ($this->route == null) return $robots;
+		return $this->twig->context->seo->robots;
+	}
+	
+	
+	/**
+	 * WordPress title
+	 */
+	function wp_title($title, $sep)
+	{
+		if ($this->route == null) return $title;
+		return $this->twig->context->seo->getTitle();
 	}
 	
 	

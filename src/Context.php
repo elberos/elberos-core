@@ -17,6 +17,15 @@ class Context implements \ArrayAccess
 	
 	
 	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		$this->__data["seo"] = new Seo();
+	}
+	
+	
+	/**
 	 * Returns all data
 	 */
 	function getData()

@@ -54,9 +54,9 @@ class Helper
 	
 	
 	/**
-	 * Returns widget content
+	 * Returns widget instance
 	 */
-	static function widget_content($widget_name, $params)
+	static function widget_create($widget_name, $params)
 	{
 		$main = \Elberos_Plugin::main();
 		
@@ -70,6 +70,18 @@ class Helper
 		/* Create widget */
 		$widget = static::newInstance($class_name, [$params]);
 		$widget->setup();
+		
+		return $widget;
+	}
+	
+	
+	/**
+	 * Returns widget content
+	 */
+	static function widget_content($widget_name, $params)
+	{
+		/* Create widget */
+		$widget = static::widget_create($widget_name, $params);
 		
 		/* Render widget */
 		$content = $widget->render();

@@ -10,15 +10,15 @@
 	{% for item in items %}
 		<li class="menu__item" itemprop="name">
 			{% if item.url != "#" %}
-				<a href="{{ item.url != "#" ? item.url : "" }}" itemprop="url">
+				<a class="menu__item_title {% if count(item.subitems) > 0 %}menu__item_title--subitems{% endif %}" href="{{ item.url != "#" ? item.url : "" }}" itemprop="url">
 					<span class="menu__item_title">{{ item.title }}</span>
 					{{ _self.render_dropdown(_self, widget, item.subitems) }}
 				</a>
 			{% else %}
-				<a itemprop="url">
+				<div class="menu__item_title {% if count(item.subitems) > 0 %}menu__item_title--subitems{% endif %}" itemprop="url">
 					<span class="menu__item_title">{{ item.title }}</span>
 					{{ _self.render_dropdown(_self, widget, item.subitems) }}
-				</a>
+				</div>
 			{% endif %}
 			{% if count(item.subitems) > 0 %}
 			{{ _self.render_menu(_self, widget, item.subitems,level + 1) }}

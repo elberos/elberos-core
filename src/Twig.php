@@ -83,6 +83,7 @@ class Twig
 			"create_wp_query",
 			"widget",
 			"widget_content",
+			"widget_create",
 			"wp_query",
 		];
 		foreach ($items as $item)

@@ -82,8 +82,11 @@ class Menu extends \Elberos\Widget\BaseWidget
 	/**
 	 * Render widget
 	 */
-	function render()
+	function render($params = null)
 	{
+		/* Setup new params */
+		$this->setParams($params);
+		
 		/* Render menu */
 		$main = \Elberos_Plugin::main();
 		$content = $main->twig->renderTemplate("@core/widget/menu.twig", [
