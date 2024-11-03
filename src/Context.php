@@ -61,19 +61,19 @@ class Context implements \ArrayAccess
 	/**
 	 * Array methods
 	 */
-	public function offsetExists($key)
+	public function offsetExists($key): bool
 	{
 		return $this->exists($key);
 	}
-	public function offsetUnset($offset)
+	public function offsetUnset(mixed $key): void
 	{
 		$this->unset($key);
 	}
-	public function offsetGet($key)
+	public function offsetGet($key): mixed
 	{
 		return $this->get($key);
 	}
-	public function offsetSet($key, $value)
+	public function offsetSet(mixed $key, mixed $value): void
 	{
 		$this->set($key, $value);
 	}

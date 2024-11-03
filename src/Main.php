@@ -29,6 +29,7 @@ class Main
 		add_filter('wp_robots', array($this, 'wp_robots'));
 		add_filter('wp_title', array($this, 'wp_title'), 0, 2);
 		add_filter('do_parse_request', array($this, 'do_parse_request'), 9999);
+		add_filter('redirect_canonical', array($this, 'redirect_canonical'), 9999, 2);
 		add_filter('rank_math/frontend/disable_integration',
 			array($this, 'rank_math_disable_integration'));
 	}
@@ -319,6 +320,16 @@ class Main
 	{
 		if ($this->route == null) return $title;
 		return $this->twig->context->seo->getTitle();
+	}
+	
+	
+	/**
+	 * Disable canonical redirect
+	 */
+	function redirect_canonical($redirect_url, $requested_url)
+	{
+		if ($this->route == null) return $redirect_url;
+		return false;
 	}
 	
 	
